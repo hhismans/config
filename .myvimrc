@@ -1,0 +1,31 @@
+" **************************************************************************** "
+"                                                                              "
+"                                                         :::      ::::::::    "
+"    .myvimrc                                           :+:      :+:    :+:    "
+"                                                     +:+ +:+         +:+      "
+"    By: zaz <zaz@staff.42.fr>                      +#+  +:+       +#+         "
+"                                                 +#+#+#+#+#+   +#+            "
+"    Created: 2013/06/15 12:36:36 by zaz               #+#    #+#              "
+"    Updated: 2014/08/17 02:59:37 by hhismans         ###   ########.fr        "
+"                                                                              "
+" **************************************************************************** "
+
+"Put your custom Vim configuration here
+filetype plugin indent on
+syntax on
+set nowrap
+set mouse=a
+set ruler
+set colorcolumn=80
+set showmatch
+set list
+set listchars=tab:>-,trail:-
+set nocompatible
+set number
+
+"Better command completion
+set wildmenu
+set wildmode=list:longest
+
+"Show current line
+set cursorline
