@@ -6,7 +6,7 @@
 "    By: zaz <zaz@staff.42.fr>                      +#+  +:+       +#+         "
 "                                                 +#+#+#+#+#+   +#+            "
 "    Created: 2013/06/15 12:36:36 by zaz               #+#    #+#              "
-"    Updated: 2014/08/17 02:59:37 by hhismans         ###   ########.fr        "
+"    Updated: 2015/05/28 01:14:52 by hhismans         ###   ########.fr        "
 "                                                                              "
 " **************************************************************************** "
 
@@ -29,3 +29,33 @@ set wildmode=list:longest
 
 "Show current line
 set cursorline
+
+function! s:insert_gates()
+  let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g")
+  execute "normal! i#ifndef " . gatename
+  execute "normal! o# define " . gatename
+  execute "normal! Go#endif"
+  normal! kk
+endfunction
+autocmd BufNewFile *.{h,hpp} call <SID>insert_gates()
+
+autocmd BufNewFile *.class.php  0r ~/DIV/template/tmpl.class.php
+
+
+nnoremap  <Up>     <NOP>
+nnoremap  <Down>   <NOP>
+nnoremap  <Left>   <NOP>
+nnoremap  <Right>  <NOP>
+
+vnoremap  <Up>     <NOP>
+vnoremap  <Down>   <NOP>
+vnoremap  <Left>   <NOP>
+vnoremap  <Right>  <NOP>
+
+inoremap  <Up>     <NOP>
+inoremap  <Down>   <NOP>
+inoremap  <Left>   <NOP>
+inoremap  <Right>  <NOP>
+
+inoremap  jk <esc>
+inoremap  <esc> <NOP>
