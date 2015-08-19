@@ -6,9 +6,19 @@
 "    By: zaz <zaz@staff.42.fr>                      +#+  +:+       +#+         "
 "                                                 +#+#+#+#+#+   +#+            "
 "    Created: 2013/06/15 12:36:36 by zaz               #+#    #+#              "
-"    Updated: 2015/05/28 01:14:52 by hhismans         ###   ########.fr        "
+"    Updated: 2015/06/23 11:19:23 by hhismans         ###   ########.fr        "
 "                                                                              "
 " **************************************************************************** "
+
+set term=xterm-256color
+nnoremap com i/********************************<esc>o   <esc>o<bs><bs><bs><bs>********************************/<esc>ka
+
+execute pathogen#infect()
+execute pathogen#helptags()
+
+" Syntastic
+let g:syntastic_cpp_compiler_options = "-Wall -Wextra -Werror -I."
+let g:syntastic_cpp_check_header = 1
 
 "Put your custom Vim configuration here
 filetype plugin indent on
@@ -30,14 +40,60 @@ set wildmode=list:longest
 "Show current line
 set cursorline
 
+".h buf
 function! s:insert_gates()
   let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g")
+  execute "normal! :Stdheader\<cr>"
   execute "normal! i#ifndef " . gatename
   execute "normal! o# define " . gatename
   execute "normal! Go#endif"
   normal! kk
 endfunction
-autocmd BufNewFile *.{h,hpp} call <SID>insert_gates()
+autocmd BufNewFile *.{h} call <SID>insert_gates()
+
+"hpp buf
+function! s:insert_class_hpp()
+  let gatename_h = substitute(toupper(expand("%:t")), "\\.", "_", "g")
+  let gatename = substitute((expand("%:t")), ".class.hpp", "", "g")
+  execute "normal! :Stdheader\<cr>"
+  execute "normal! i#ifndef " . gatename_h
+  execute "normal! o# define " . gatename_h
+  execute "normal! o"
+  execute "normal! oclass " . gatename
+  execute "normal! o{"
+  execute "normal! opublic:"
+  execute "normal! o". gatename . "( void );"
+  execute "normal! o". gatename . "( ". gatename . " const & src );"
+  execute "normal! o~". gatename . "( void );"
+  execute "normal! o"
+  execute "normal! o". gatename . " &	operator=( ". gatename . " const & rhs);"
+  execute "normal! oprivate:"
+  execute "normal! o}"
+  execute "normal! Go#endif"
+  normal! kk
+endfunction
+autocmd BufNewFile *.{class.hpp} call <SID>insert_class_hpp()
+
+function! s:insert_class_cpp()
+  let gatename = substitute((expand("%:t")), ".class.cpp", "", "g")
+  execute "normal! :Stdheader\<cr>"
+  execute "normal! i" . gatename . "::" . gatename . "( void )"
+  execute "normal! o{"
+  execute "normal! o}"
+  execute "normal! o"
+  execute "normal! o" . gatename . "::" . gatename . "( " . gatename . " const & src )"
+  execute "normal! o{"
+  execute "normal! o}"
+  execute "normal! o"
+  execute "normal! o" . gatename . "::~" . gatename . "( void )"
+  execute "normal! o{"
+  execute "normal! o}"
+  execute "normal! o". gatename." &" . gatename . "::operator=( " . gatename . " const & rhs )"
+  execute "normal! o{"
+  execute "normal! o}"
+  normal! kk
+endfunction
+autocmd BufNewFile *.{class.cpp} call <SID>insert_class_cpp()
 
 autocmd BufNewFile *.class.php  0r ~/DIV/template/tmpl.class.php
 
@@ -59,3 +115,17 @@ inoremap  <Right>  <NOP>
 
 inoremap  jk <esc>
 inoremap  <esc> <NOP>
+
+vnoremap wh :tabprev
+vnoremap wh :tabprev<cr>
+nnoremap wh :tabprev
+nnoremap wh :tabprev<cr>
+"inoremap wh :tabprev
+"inoremap wh :tabprev<cr>
+
+vnoremap wl :tabnext
+vnoremap wl :tabnext<cr>
+nnoremap wl :tabnext
+nnoremap wl :tabnext<cr>
+"inoremap wl :tabnext
+"inoremap wl :tabnext
