@@ -6,12 +6,12 @@
 "    By: zaz <zaz@staff.42.fr>                      +#+  +:+       +#+         "
 "                                                 +#+#+#+#+#+   +#+            "
 "    Created: 2013/06/15 12:36:36 by zaz               #+#    #+#              "
-"    Updated: 2015/06/23 11:19:23 by hhismans         ###   ########.fr        "
+"    Updated: 2015/10/30 02:20:42 by hhismans         ###   ########.fr        "
 "                                                                              "
 " **************************************************************************** "
 
 set term=xterm-256color
-nnoremap com i/********************************<esc>o   <esc>o<bs><bs><bs><bs>********************************/<esc>ka
+"nnoremap ccom i/********************************<esc>o   <esc>o<bs><bs><bs><bs>********************************/<esc>ka
 
 execute pathogen#infect()
 execute pathogen#helptags()
@@ -29,13 +29,23 @@ set ruler
 set colorcolumn=80
 set showmatch
 set list
+" Showing tab
 set listchars=tab:>-,trail:-
+highlight SpecialKey guifg=grey ctermfg=darkgrey
+
+
 set nocompatible
 set number
 
 "Better command completion
 set wildmenu
 set wildmode=list:longest
+
+"comment
+autocmd FileType c,objc setlocal comments=s:/*,m:**,ex:*/
+highlight Comment ctermfg=lightcyan
+nnoremap com i/*<esc>o<esc>o/<esc>kA
+nnoremap ccom i/*<esc>oNAME<tab><tab><tab>:<tab><esc>oDESCRIPTION<tab>:<tab><esc>oINPUT<tab><tab>:<tab><esc>oRETURN VALUE<tab>:<tab><esc>o/<esc>kkkkA
 
 "Show current line
 set cursorline
@@ -68,7 +78,7 @@ function! s:insert_class_hpp()
   execute "normal! o"
   execute "normal! o". gatename . " &	operator=( ". gatename . " const & rhs);"
   execute "normal! oprivate:"
-  execute "normal! o}"
+  execute "normal! o};"
   execute "normal! Go#endif"
   normal! kk
 endfunction
@@ -98,23 +108,7 @@ autocmd BufNewFile *.{class.cpp} call <SID>insert_class_cpp()
 autocmd BufNewFile *.class.php  0r ~/DIV/template/tmpl.class.php
 
 
-nnoremap  <Up>     <NOP>
-nnoremap  <Down>   <NOP>
-nnoremap  <Left>   <NOP>
-nnoremap  <Right>  <NOP>
-
-vnoremap  <Up>     <NOP>
-vnoremap  <Down>   <NOP>
-vnoremap  <Left>   <NOP>
-vnoremap  <Right>  <NOP>
-
-inoremap  <Up>     <NOP>
-inoremap  <Down>   <NOP>
-inoremap  <Left>   <NOP>
-inoremap  <Right>  <NOP>
-
 inoremap  jk <esc>
-inoremap  <esc> <NOP>
 
 vnoremap wh :tabprev
 vnoremap wh :tabprev<cr>
