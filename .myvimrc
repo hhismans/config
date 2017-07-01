@@ -6,22 +6,79 @@
 "    By: zaz <zaz@staff.42.fr>                      +#+  +:+       +#+         "
 "                                                 +#+#+#+#+#+   +#+            "
 "    Created: 2013/06/15 12:36:36 by zaz               #+#    #+#              "
-"    Updated: 2015/10/30 02:20:42 by hhismans         ###   ########.fr        "
+"    Updated: 2017/05/11 06:58:40 by hhismans         ###   ########.fr        "
 "                                                                              "
 " **************************************************************************** "
+" srlsy, need to clean this shit.
+"
+set nocompatible              " be iMproved, required
+filetype off                  " required
 
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+"Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+"Plugin 'valloric/youcompleteme'
+Plugin 'scrooloose/nerdtree'
+"Plugin 'scrooloose/nerdcommenter'
+"Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+"Plugin 'L9'
+" Git plugin not hosted on GitHub
+"Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+"Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+"filetype plugin indent on    " required
+
+"let g:ycm_global_extra_conf = '/nfs/2014/h/hhismans'
+"let g:ycm_confirm_extra_conf = 0
+"let g:ycm_disable_for_file_larger_than_kb = 0
+"let g:ycm_extra_conf_globlist = ['~/work/*']
+
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+set tabstop=4
+set shiftwidth=4
 set term=xterm-256color
+
 "nnoremap ccom i/********************************<esc>o   <esc>o<bs><bs><bs><bs>********************************/<esc>ka
 
-execute pathogen#infect()
-execute pathogen#helptags()
 
 " Syntastic
-let g:syntastic_cpp_compiler_options = "-Wall -Wextra -Werror -I."
-let g:syntastic_cpp_check_header = 1
+"let g:syntastic_cpp_compiler_options = -Wall -Wextra -Werror -I."
+"let g:syntastic_cpp_check_header = 1
 
 "Put your custom Vim configuration here
-filetype plugin indent on
+"execute pathogen#infect()
+"filetype plugin indent on
+
 syntax on
 set nowrap
 set mouse=a
@@ -42,14 +99,17 @@ set wildmenu
 set wildmode=list:longest
 
 "comment
-autocmd FileType c,objc setlocal comments=s:/*,m:**,ex:*/
-highlight Comment ctermfg=lightcyan
+autocmd FileType c,objc,h setlocal comments=s:/*,m:**,ex:*/
+
+
+
 nnoremap com i/*<esc>o<esc>o/<esc>kA
 nnoremap ccom i/*<esc>oNAME<tab><tab><tab>:<tab><esc>oDESCRIPTION<tab>:<tab><esc>oINPUT<tab><tab>:<tab><esc>oRETURN VALUE<tab>:<tab><esc>o/<esc>kkkkA
 
 "Show current line
 set cursorline
-
+set background=dark
+colorscheme hybrid
 ".h buf
 function! s:insert_gates()
   let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g")
@@ -82,6 +142,7 @@ function! s:insert_class_hpp()
   execute "normal! Go#endif"
   normal! kk
 endfunction
+
 autocmd BufNewFile *.{class.hpp} call <SID>insert_class_hpp()
 
 function! s:insert_class_cpp()
@@ -103,10 +164,41 @@ function! s:insert_class_cpp()
   execute "normal! o}"
   normal! kk
 endfunction
+
+
+
+function! s:insert_class_php()
+  let gatename = substitute((expand("%:t")), ".class.php", "", "g")
+  execute "normal! i<?php"
+  execute "normal! oClass " . gatename . " {"
+  execute "normal! ostatic public function doc() {return (PHP_EOL.file_get_contents('../docs/" . gatename . ".doc.txt'));}"
+  execute "normal! ofunction __construct( array $kwargs ){return;}"
+  execute "normal! ofunction __destruct(){return;}"
+  execute "normal! o}"
+  execute "normal! Go?>"
+  normal! kk
+endfunction
+
 autocmd BufNewFile *.{class.cpp} call <SID>insert_class_cpp()
 
-autocmd BufNewFile *.class.php  0r ~/DIV/template/tmpl.class.php
+"autocmd BufNewFile *.class.php   call <SID>insert_class_php()
+autocmd BufNewFile *.class.php call <SID>insert_class_php()
+autocmd BufNewFile *.doc.txt  0r ~/DIV/template/tmpl.doc.txt
 
+
+
+" auto open or close NERDTree
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" NERDTree -----------------------------
+
+" toggle nerdtree display
+map <F5> :NERDTreeToggle<CR>
+" open nerdtree with the current file selected
+nmap ,t :NERDTreeFind<CR>
+" don;t show these file types
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
 inoremap  jk <esc>
 
@@ -123,3 +215,5 @@ nnoremap wl :tabnext
 nnoremap wl :tabnext<cr>
 "inoremap wl :tabnext
 "inoremap wl :tabnext
+
+nnoremap // <^>//<esc>

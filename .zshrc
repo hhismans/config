@@ -2,8 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/nfs/2014/h/hhismans/.oh-my-zsh
-export PATH=/nfs/2014/h/hhismans/stuff/bin:$PATH
+export ZSH=/Users/hhismans/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -83,4 +82,11 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
+alias goindex="cp *.php ~/http/MyWebSite/index.php"
+
+alias gitl="git log --all --oneline --graph --decorate"
+alias opt="ocamlopt"
+alias goindex="cp *.php ~/http/MyWebSite/index.php"
+PATH=~/.brew/bin:$PATH
+PATH=~/bin:$PATH
 # alias ohmyzsh="mate ~/.oh-my-zsh"
